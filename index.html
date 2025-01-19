@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertidor Universal</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Convertidor Universal</h1>
+    </header>
+    <main>
+        <form id="conversion-form">
+            <label for="inputType">Selecciona el tipo de entrada:</label>
+            <select id="inputType" required>
+                <option value="" disabled selected>-- Seleccionar --</option>
+                <option value="binary">Binario</option>
+                <option value="decimal">Decimal</option>
+                <option value="hexadecimal">Hexadecimal</option>
+                <option value="octal">Octal</option>
+                <option value="ascii">ASCII</option>
+            </select>
+
+            <label for="outputType">Selecciona el tipo de salida:</label>
+            <select id="outputType" required>
+                <option value="" disabled selected>-- Seleccionar --</option>
+            </select>
+
+            <label for="inputValue">Ingresa el valor:</label>
+            <input 
+                type="text" 
+                id="inputValue" 
+                placeholder="Ejemplo: 'quince' o '15'" 
+                required
+            >
+            <small id="inputHint">Puedes ingresar palabras o números según el tipo seleccionado.</small>
+
+            <button type="submit">Convertir</button>
+        </form>
+
+        <div id="resultContainer">
+            <p id="conversionResult">Resultado: </p>
+        </div>
+
+        <div id="errorContainer" style="color: red; display: none;">
+            <p id="errorMessage"></p>
+        </div>
+    </main>
+    <script src="js/app.js" type="module" defer></script>
+</body>
+</html>
