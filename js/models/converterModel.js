@@ -1,4 +1,3 @@
-// Función para convertir palabras numéricas a números decimales
 const wordToDecimal = (word) => {
     const numberWords = {
         cero: 0, uno: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, 
@@ -13,10 +12,21 @@ const wordToDecimal = (word) => {
     return decimal;
 };
 
-// Validar si el valor ingresado es una palabra numérica
-const isWordNumeric = (value) => /^[a-záéíóúüñ]+$/i.test(value);
+const isWordNumeric = (value) => {
+    const numberWords = [
+        'cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 
+        'ocho', 'nueve', 'diez', 'once', 'doce', 'trece', 'catorce', 
+        'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve', 
+        'veinte'
+    ];
+    return numberWords.includes(value.toLowerCase());
+};
 
-// Obtener el resultado de conversión
+const isValidHex = (value) => /^[0-9A-Fa-f]+$/.test(value);
+const isValidBinary = (value) => /^[01]+$/.test(value);
+const isValidOctal = (value) => /^[0-7]+$/.test(value);
+const isValidAscii = (value) => typeof value === 'string' && value.length === 1;
+
 export const getConversionResult = (inputType, outputType, inputValue) => {
     const conversions = {
         binary: binaryToOthers,
@@ -26,8 +36,20 @@ export const getConversionResult = (inputType, outputType, inputValue) => {
         ascii: asciiToOthers
     };
 
+    if (inputType === 'hexadecimal' && !isValidHex(inputValue)) {
+        throw new Error('El valor hexadecimal no es válido.');
+    }
+    if (inputType === 'binary' && !isValidBinary(inputValue)) {
+        throw new Error('El valor binario no es válido.');
+    }
+    if (inputType === 'octal' && !isValidOctal(inputValue)) {
+        throw new Error('El valor octal no es válido.');
+    }
+    if (inputType === 'ascii' && !isValidAscii(inputValue)) {
+        throw new Error('El valor ASCII no es válido.');
+    }
     if (isWordNumeric(inputValue)) {
-        inputValue = wordToDecimal(inputValue); // Convertir palabra numérica a decimal
+        inputValue = wordToDecimal(inputValue);
         inputType = 'decimal';
     }
 
@@ -38,46 +60,40 @@ export const getConversionResult = (inputType, outputType, inputValue) => {
     return conversions[inputType](inputValue, outputType);
 };
 
-// Conversiones desde Binary
 const binaryToOthers = (binary, target) => {
     const decimal = parseInt(binary, 2);
     if (isNaN(decimal)) throw new Error('El valor binario no es válido.');
-    if (target === 'decimal') return decimal.toString(); // Agregado
+    if (target === 'decimal') return decimal.toString(); 
     return convertFromDecimal(decimal, target);
 };
 
-// Conversiones desde Decimal
 const decimalToOthers = (decimal, target) => {
     decimal = parseInt(decimal, 10);
     if (isNaN(decimal)) throw new Error('El valor decimal no es válido.');
     return convertFromDecimal(decimal, target);
 };
 
-// Conversiones desde Hexadecimal
 const hexToOthers = (hex, target) => {
     const decimal = parseInt(hex, 16);
     if (isNaN(decimal)) throw new Error('El valor hexadecimal no es válido.');
-    if (target === 'decimal') return decimal.toString(); // Agregado
+    if (target === 'decimal') return decimal.toString();
     return convertFromDecimal(decimal, target);
 };
 
-// Conversiones desde Octal
 const octalToOthers = (octal, target) => {
     const decimal = parseInt(octal, 8);
     if (isNaN(decimal)) throw new Error('El valor octal no es válido.');
-    if (target === 'decimal') return decimal.toString(); // Agregado
+    if (target === 'decimal') return decimal.toString(); 
     return convertFromDecimal(decimal, target);
 };
 
-// Conversiones desde ASCII
 const asciiToOthers = (ascii, target) => {
     if (ascii.length > 1) throw new Error('El valor ASCII debe ser un único carácter.');
     const decimal = ascii.charCodeAt(0);
-    if (target === 'decimal') return decimal.toString(); // Agregado
-    return convertFromDecimal(decimal, target); // Maneja binario, hexadecimal y octal
+    if (target === 'decimal') return decimal.toString(); 
+    return convertFromDecimal(decimal, target); 
 };
 
-// Convertir desde Decimal a otros sistemas
 const convertFromDecimal = (decimal, target) => {
     switch (target) {
         case 'binary': return decimal.toString(2);

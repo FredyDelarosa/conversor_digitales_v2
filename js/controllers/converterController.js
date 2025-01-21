@@ -16,9 +16,7 @@ export const handleConversion = () => {
         updateConversionResult('Error: Llena todos los campos.');
         return;
     }
-
-    
-
+ 
     try {
         const result = getConversionResult(inputType, outputType, inputValue);
         updateConversionResult(result);
